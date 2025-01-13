@@ -7,13 +7,25 @@
       Preencha os campos abaixo.
     </p>
     <form action="/login" method="post">
-      <div class="mb-3">
+      <div class="mb-2">
         <label for="email" class="form-label">Email<strong class="text-danger">*</strong></label>
         <input type="text" class="form-control" id="email" name="email" required>
       </div>
       <div class="mb-2">
         <label for="senha" class="form-label">Senha<strong class="text-danger">*</strong></label>
         <input type="password" class="form-control" id="senha" name="senha" required>
+      </div>
+      <div class="mb-2">
+        <small class="text-muted">
+          Os campos marcados com <strong class="text-danger">*</strong> são obrigatórios.
+          
+          <a href="/cadastro">Clique aqui para Criar a sua conta</a>
+        </small>
+      </div>
+      <div class="mb-3 d-grid gap-2">
+        <button type="submit" class="btn btn-sm btn-dark">
+          Entrar
+        </button>
       </div>
     </form>
   </div>
