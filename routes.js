@@ -7,6 +7,7 @@ const path = require("path")
 const formatUser = require("./user/formatUser.js")
 const Date = require("./moment/Date.js")
 const moment = require("moment")
+const { marked } = require("marked")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -208,5 +209,34 @@ app.get("/publicar", async(req, res)=>{
       <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
       `
     })
+  }
+})
+app.post("/publicar", async(req, res)=>{
+  const ip = await fetchIP()
+  const { titulo, fonte } = req.body
+  const conteudo = marked(req.body.conteudo)
+  const user = await User.findOne({
+    where: {
+      ip: ip.ip
+    }
+  })
+
+  if(user === null){
+    const buttons = `
+    <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
+    <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
+    `
+    res.render("error/not_access", {
+      buttons
+    })
+  }else{
+    const post = await Post.create({
+      nome: user["nome"],
+      titulo,
+      conteudo,
+      fonte,
+      data: Date()
+    })
+    res.redirect("/")
   }
 })
