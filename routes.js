@@ -155,9 +155,34 @@ app.post("/login", async(req, res)=>{
       ip: ip.ip
     }, {
       where: {
-        nome,
-        email
+        email,
+        senha
       }
+    })
+    res.redirect("/")
+  }
+})
+app.get("/pesquisar", async(req, res)=>{
+  const ip = await fetchIP()
+  const user = await User.findOne({
+    where: {
+      ip: ip.ip
+    }
+  })
+
+  if(user === null){
+    const buttons = `
+    <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
+    <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
+    `
+    res.render("pesquisar", {
+      buttons
+    })
+  }else{
+    res.render("pesquisar", {
+      buttons: `
+      <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+      `
     })
   }
 })
