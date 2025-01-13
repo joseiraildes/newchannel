@@ -186,3 +186,27 @@ app.get("/pesquisar", async(req, res)=>{
     })
   }
 })
+app.get("/publicar", async(req, res)=>{
+  const ip = await fetchIP()
+  const user = await User.findOne({
+    where: {
+      ip: ip.ip
+    }
+  })
+
+  if(user === null){
+    const buttons = `
+    <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
+    <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
+    `
+    res.render("error/not_access", {
+      buttons
+    })
+  }else{
+    res.render("publicar", {
+      buttons: `
+      <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+      `
+    })
+  }
+})
