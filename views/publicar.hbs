@@ -1,0 +1,28 @@
+<div class="container p-4">
+  <div class="p-4 container">
+    <h2>
+      Publicar Novo Conteúdo
+      <span class="badge bg-dark">New</span>
+      
+    </h2>
+    <form action="/publicar" method="post">
+      <div class="mb-2">
+        <label for="titulo">Título<strong class="text-danger">*</strong></label>
+        <input type="text" class="form-control" id="titulo" name="titulo" placeholder="ex. de frameworks para Back-end e Front-end" required>
+      </div>
+      <div class="mb-2">
+        <label for="descricao">Conteúdo<strong class="text-danger">*</strong></label>
+        <textarea class="form-control" id="descricao" name="descricao" rows="6" required></textarea>
+      </div>
+      <div class="mb-2">
+        <label for="fonte" class="form-label">Fonte(opcional)</label>
+        <input type="text" class="form-control" id="fonte" name="fonte" placeholder="https://exemplo.site/noticia">
+      </div>
+      <div class="mb-3 d-grid gap-2">
+        <button type="submit" class="btn btn-sm btn-dark">
+          <i><b>Publicar</b></i>
+        </button>
+      </div>
+    </form>
+  </div>
+</div>
