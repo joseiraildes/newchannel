@@ -17,6 +17,12 @@
         </strong>
         <br><br>
         {{{conteudo}}}
+        <br>
+        {{#if fonte}}
+          <ul>
+            <li><a href="{{{fonte}}}">{{fonte}}</a></li>
+          </ul>
+        {{/if}}
       </div>
     </div>
     <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
@@ -49,4 +55,9 @@
       </button>
     </div>
   {{/each}}
+  {{#if comentarios}}
+    <h2 class="display-4">
+      Comentários mais Recentes
+    </h2>
+  {{/if}}
 </div>
