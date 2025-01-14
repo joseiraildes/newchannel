@@ -8,6 +8,8 @@ const formatUser = require("./user/formatUser.js")
 const Date = require("./moment/Date.js")
 const moment = require("moment")
 const { marked } = require("marked")
+const Post = require("./models/Post.js")
+const MySql = require("./infra/mysql.js")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -21,12 +23,18 @@ app.set("views", path.join(__dirname + "/views"))
 
 app.get("/", async(req, res)=>{
   const ip = await fetchIP()
-
+  const mysql = await MySql()
   const user = await User.findOne({
     where: {
       ip: ip.ip
     }
   })
+
+  const [ post, rowsPost ] = await mysql.query(`
+    SELECT *
+    FROM posts
+    ORDER BY RAND() LIMIT 30
+  `)
 
   if(user === null){
     const buttons = `
@@ -34,13 +42,15 @@ app.get("/", async(req, res)=>{
     <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
     `
     res.render("home", {
-      buttons
+      buttons,
+      post
     })
   }else{
     res.render("home", {
       buttons: `
       <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
-      `
+      `,
+      post
     })
   }
 })
@@ -238,5 +248,38 @@ app.post("/publicar", async(req, res)=>{
       data: Date()
     })
     res.redirect("/")
+  }
+})
+
+app.get("/@:nome/:id/:titulo", async(req, res)=>{
+  const ip = await fetchIP()
+  const mysql = await MySql()
+  const { nome, id, titulo } = req.params
+  const user = await User.findOne({
+    where: {
+      nome
+    }
+  })
+
+  if(user === null){
+    const buttons = `
+    <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
+    <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
+    `
+    res.render("post", {
+      buttons
+    })
+  }else{
+    const [ post, rows ] = await mysql.query(`
+      SELECT *
+      FROM posts
+      WHERE nome = "${nome}" AND id = "${id}"
+    `)
+    res.render("post", {
+      buttons: `
+      <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+      `,
+      post: post
+    })
   }
 })
