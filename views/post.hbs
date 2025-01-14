@@ -1,0 +1,52 @@
+<div class="container p-4">
+  {{#each post}}
+    <div class="rounded p-3 shadow mb-3">
+      <small class="text-small">
+        <a href="/">Home</a> |
+        <a href="/@{{nome}}">{{nome}}</a> |
+        <span>{{titulo}}</span>
+      </small>
+      <div class="card-body">
+        <div class="card-title">
+          <h2>
+            {{titulo}}
+          </h2>
+        </div>
+        <strong class="text-warning">
+          {{data}}
+        </strong>
+        <br><br>
+        {{{conteudo}}}
+      </div>
+    </div>
+    <div class="modal fade" id="commentModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <div class="modal-title fs-5" id="modalLabel">
+              Novo Comentário
+            </div>
+            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+          </div>
+          <div class="modal-body">
+            <form action="/@{{nome}}/{{id}}/{{titulo}}/comentar" method="post">
+              <div class="mb-3">
+                <label for="commentTextarea" class="form-label">Comentário</label>
+                <textarea class="form-control" id="commentTextarea" name="comentario" rows="3"></textarea>
+              </div>
+              <div class="mb-3 text-end">
+                <button type="submit" class="btn btn-dark">Enviar</button>
+                <button type="button" class="btn btn-outline-dark" data-bs-dismiss="modal">Cancelar</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mb-3 card p-4">
+      <button type="button" class="btn btn-outline-dark" data-bs-toggle="modal" data-bs-target="#commentModal">
+        Comentar
+      </button>
+    </div>
+  {{/each}}
+</div>
