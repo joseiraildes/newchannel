@@ -19,9 +19,9 @@
             <li><a href="/conteudos" class="nav-link px-2 text-secondary">Conteúdos</a></li>
           </ul>
 
-          <div class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-            <button type="button" class="btn btn-outline-secondary" onclick="location.href='/pesquisar'">Pesquisar...</button>
-          </div>
+          <form class="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3" role="search" action="/pesquisar">
+            <input type="search" name="pesquisar" id="pesquisar" class="form-control" placeholder="Pesquisar...">
+          </form>
 
           <div class="text-end">
             {{!-- <button type="button" class="btn btn-outline-light me-2">Login</button>
