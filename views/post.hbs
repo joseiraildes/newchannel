@@ -55,9 +55,18 @@
       </button>
     </div>
   {{/each}}
-  {{#if comentarios}}
-    <h2 class="display-4">
-      Comentários mais Recentes
-    </h2>
+  {{#if comments}}
+  <h3 class="text-center">Comentários</h3>
+  <div class="card text-bg-light">
+    {{#each comments}}
+      <div class="card-body">
+        <strong><a href="/@{{nome}}" class="text-dark text-decoration-none">{{nome}}</a></strong>
+        <small class="text-muted">
+          {{data}}
+        </small>
+        <br>
+        <p>{{{comentario}}}</p>
+      </div>
+    {{/each}}
   {{/if}}
 </div>
