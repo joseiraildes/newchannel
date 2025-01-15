@@ -10,6 +10,7 @@ const moment = require("moment")
 const { marked } = require("marked")
 const Post = require("./models/Post.js")
 const MySql = require("./infra/mysql.js")
+const Comments = require("./models/Comment.js")
 
 app.use(express.json())
 app.use(express.urlencoded({ extended: false }))
@@ -260,26 +261,60 @@ app.get("/@:nome/:id/:titulo", async(req, res)=>{
       nome
     }
   })
-
+  const [ comments, rowsComment ] = await mysql.query(`
+    SELECT *
+    FROM comentarios
+    WHERE post_id = "${id}"
+    `)
+  const [ post, rows ] = await mysql.query(`
+    SELECT *
+    FROM posts
+    WHERE nome = "${nome}" AND id = "${id}"
+  `)
   if(user === null){
     const buttons = `
     <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
     <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
     `
     res.render("post", {
-      buttons
+      buttons,
+      posts,
+      comments
     })
   }else{
-    const [ post, rows ] = await mysql.query(`
-      SELECT *
-      FROM posts
-      WHERE nome = "${nome}" AND id = "${id}"
-    `)
     res.render("post", {
       buttons: `
       <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
       `,
-      post: post
+      post,
+      comments
     })
+  }
+})
+app.post("/@:nome/:id/:titulo/comentar", async(req, res)=>{
+  const ip = await fetchIP()
+  const mysql = await MySql()
+  const { nome, id, titulo } = req.params
+  const comentario = marked(req.body.comentario)
+  const user = await User.findOne({
+    where: {
+      nome
+    }
+  })
+
+  if(user === null){
+    res.send(`
+      <script>
+        alert("Você precisa estar logado para comentar.")
+      </script>
+    `)
+  }else{
+    await Comments.create({
+      nome: user["nome"],
+      comentario,
+      data: Date(),
+      post_id: id
+    })
+    res.redirect(`/@${nome}/${id}/${titulo}`)
   }
 })
