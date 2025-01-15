@@ -318,3 +318,50 @@ app.post("/@:nome/:id/:titulo/comentar", async(req, res)=>{
     res.redirect(`/@${nome}/${id}/${titulo}`)
   }
 })
+app.get("/@:nome", async(req, res)=>{
+  const ip = await fetchIP()
+  const mysql = await MySql()
+  const { nome } = req.params
+  const user = await User.findOne({
+    where: {
+      nome
+    }
+  })
+  const [ posts, rows ] = await mysql.query(`
+    SELECT *
+    FROM posts
+    WHERE nome = "${nome}"
+    ORDER BY data DESC
+  `)
+  const [ comments, rowsComment ] = await mysql.query(`
+    SELECT *
+    FROM comentarios
+    WHERE nome = "${nome}"
+  `)
+  const [ userProfile, rowsProfile ] = await mysql.query(`
+    SELECT *
+    FROM users
+    WHERE nome = "${nome}"
+  `)
+  if(user === null){
+    const buttons = `
+    <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
+    <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
+    `
+    res.render("timeline", {
+      buttons,
+      posts,
+      comments,
+      user: userProfile
+    })
+  }else{
+    res.render("timeline", {
+      buttons: `
+      <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+      `,
+      posts,
+      comments,
+      user: userProfile
+    })
+  }
+})
