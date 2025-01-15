@@ -1,21 +1,18 @@
 <br><br><br>
-<div class="container">
+<div class="container d-flex justify-content-center align-items-center">
   <div class="row">
     {{#each post}}
-      <div class="col-md-6">
-        <div class="card">
-          <div class="card-header d-flex justify-content-between">
-            <span>
-              <a class="text-muted" href="/@{{nome}}">@{{nome}}</a>
+      <div class="col-md-5 mb-3">
+        <div class="card text-bg-light p-4">
+          <div>
+            <strong>
+              <a href="/@{{nome}}" class="text-dark">{{nome}}</a>
+            </strong>
+            <span class="text-muted">
+              {{data}}
             </span>
           </div>
-          <div class="card-body">
-            <a href="/@{{nome}}/{{id}}/{{titulo}}">{{titulo}}</a>
-            <br>
-            <strong class="text-small">
-              {{data}}
-            </strong>
-          </div>
+          <a href="/@{{nome}}/{{id}}/{{titulo}}" class="text-muted">{{titulo}}</a>
         </div>
       </div>
     {{/each}}
