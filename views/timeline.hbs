@@ -1,0 +1,115 @@
+<div class="container p-4">
+  {{#each user}}
+    <div class="mb-3">
+      <h2>
+        {{nome}}
+      </h2>
+    </div>
+
+    <!-- Nav tabs -->
+    <ul class="nav nav-tabs mb-3" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link active"
+          id="profile-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#profile"
+          type="button"
+          role="tab"
+          aria-controls="profile"
+          aria-selected="true"
+        >
+          Perfil
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="posts-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#posts"
+          type="button"
+          role="tab"
+          aria-controls="posts"
+          aria-selected="false"
+        >
+          Publicações
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button
+          class="nav-link"
+          id="comments-tab"
+          data-bs-toggle="tab"
+          data-bs-target="#comments"
+          type="button"
+          role="tab"
+          aria-controls="comments"
+          aria-selected="false"
+        >
+          Comentários
+        </button>
+      </li>
+    </ul>
+    
+    <!-- Tab panes -->
+    <div class="tab-content">
+      <div class="tab-pane active" id="profile" role="tabpanel" aria-labelledby="profile-tab">
+        <span class="text-muted">{{{data}}}</span>
+        <div class="p-3">
+          <div class="card text-bg-light">
+            <div class="card-body">
+              {{{biografia}}}
+  {{/each}}
+            </div>
+          </div>  
+          <div class="mt-2 text-center">
+            {{{edit}}}
+          </div>
+        </div>
+      </div>
+      <div class="tab-pane" id="posts" role="tabpanel" aria-labelledby="posts-tab">
+        <div class="row">
+          {{#each posts}}
+            <div class="col-sm-6">
+              <div class="card text-bg-light">
+                <div class="card-body">
+                  <div>
+                    <strong>
+                      <a href="/@{{nome}}" class="text-dark text-decoration-none">{{nome}}</a>
+                    </strong>
+                    <span class="text-muted">
+                      {{data}}
+                    </span>
+                  </div>
+                  <a href="/@{{nome}}/{{id}}/{{titulo}}" class="text-dark">{{titulo}}</a>
+                </div>
+
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+      <div class="tab-pane" id="comments" role="tabpanel" aria-labelledby="comments-tab">
+        <div class="row">
+          {{#each comments}}
+            <div class="col-sm-6">
+              <div class="card text-bg-light">
+                <div class="card-body">
+                  <div>
+                    <strong>
+                      <a href="/@{{nome}}" class="text-dark text-decoration-none">{{nome}}</a>
+                    </strong>
+                    <span class="text-muted">
+                      {{data}}
+                    </span>
+                  </div>
+                  <p>{{{comentario}}}</p>
+                </div>
+              </div>
+            </div>
+          {{/each}}
+        </div>
+      </div>
+    </div>
+</div>

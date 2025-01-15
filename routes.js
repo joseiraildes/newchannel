@@ -324,6 +324,11 @@ app.get("/@:nome", async(req, res)=>{
   const { nome } = req.params
   const user = await User.findOne({
     where: {
+      ip: ip.ip
+    }
+  })
+  const user1 = await User.findOne({
+    where: {
       nome
     }
   })
@@ -355,13 +360,29 @@ app.get("/@:nome", async(req, res)=>{
       user: userProfile
     })
   }else{
-    res.render("timeline", {
-      buttons: `
-      <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
-      `,
-      posts,
-      comments,
-      user: userProfile
-    })
+    if(user["nome"] === user1["nome"]){
+      res.render("timeline", {
+        buttons: `
+          <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+        `,
+        posts,
+        comments,
+        user: userProfile,
+        edit: `
+          <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/editar-perfil'">Editar Perfil</button>
+        `
+      })
+      console.log("Perfil de usuário é o mesmo que está acessando")
+    }else{
+      res.render("timeline", {
+        buttons: `
+          <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${userProfile['nome']}'">@${userProfile["nome"]}</button>
+        `,
+        posts,
+        comments,
+        user: userProfile
+      })
+    }
+    
   }
 })
