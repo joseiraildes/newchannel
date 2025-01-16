@@ -433,3 +433,34 @@ app.get("/@:nome", async(req, res)=>{
     
   }
 })
+app.get("/editar-perfil", async(req, res)=>{
+  const ip = await fetchIP()
+  const mysql = await MySql()
+  const user = await User.findOne({
+    where: {
+      ip: ip.ip
+    }
+  })
+  if(user === null){
+    const buttons = `
+    <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
+    <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
+    `
+    res.render("error/not_access", {
+      buttons
+    })
+  }else{
+    const [ userEdit, rowsEdit ] = await mysql.query(`
+      SELECT *
+      FROM users
+      WHERE ip = "${ip.ip}"
+    `)
+
+    res.render("editar_perfil", {
+      buttons: `
+        <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+      `,
+      user: userEdit
+    })
+  }
+})
