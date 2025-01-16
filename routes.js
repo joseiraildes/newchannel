@@ -464,3 +464,30 @@ app.get("/editar-perfil", async(req, res)=>{
     })
   }
 })
+app.post("/editar-perfil", async(req, res)=>{
+  const ip = await fetchIP()
+  const mysql = await MySql()
+  const biografia = marked(req.body.biografia)
+  const user = await User.findOne({
+    where: {
+      ip: ip.ip
+    }
+  })
+
+  if(user === null){
+    res.send(`
+      <script>
+        alert("Você precisa estar logado para editar seu perfil.")
+      </script>
+    `)
+  }else{
+    await User.update({
+      biografia
+    }, {
+      where: {
+        ip: ip.ip
+      }
+    })
+    res.redirect(`/@${user['nome']}`)
+  }
+})
