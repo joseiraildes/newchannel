@@ -1,0 +1,31 @@
+<div class="container p-4">
+  <div class="p-4 container">
+    <h2>
+      Editar Perfil
+    </h2>
+    {{#each user}}
+      <form action="/editar-perfil" method="post">
+        <div class="mb-3">
+          <label for="nome" class="form-label">Nome</label>
+          <input type="text" class="form-control" id="nome" name="nome" value="{{nome}}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="email" class="form-label">Email</label>
+          <input type="text" class="form-control" id="email" name="email" value="{{email}}" readonly>
+        </div>
+        <div class="mb-3">
+          <label for="senha" class="form-label">Senha</label>
+          <input type="password" class="form-control" id="senha" name="senha" required>
+        </div>
+        <div class="mb-3">
+          {{!-- Biografia --}}
+          <label for="biografia" class="form-label">Biografía</label>
+          <textarea class="form-control" id="biografia" name="biografia" rows="10" style="padding-left: 2rem;">{{biografia}}</textarea>
+        </div>
+        <div class="mb-3 d-grid gap-2">
+          <button type="submit" class="btn btn-dark">Salvar</button>
+        </div>
+      </form>
+    {{/each}}
+  </div>
+</div>
