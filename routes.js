@@ -174,8 +174,10 @@ app.post("/login", async(req, res)=>{
     res.redirect("/")
   }
 })
-app.get("/pesquisar", async(req, res)=>{
+app.post("/pesquisar", async(req, res)=>{
   const ip = await fetchIP()
+  const mysql = await MySql()
+  const { type, search } = req.body
   const user = await User.findOne({
     where: {
       ip: ip.ip
@@ -187,15 +189,60 @@ app.get("/pesquisar", async(req, res)=>{
     <button type="button" class="btn btn-sm btn-outline-dark me-2" onclick="location.href='/login'">Entrar</button>
     <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/cadastro'">Registrar-se</button>
     `
-    res.render("pesquisar", {
+    res.render("error/not_access", {
       buttons
     })
   }else{
-    res.render("pesquisar", {
-      buttons: `
-      <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
-      `
-    })
+    if(type === "usuario"){
+      const [ findAllUsers, rows ] = await mysql.query(`
+        SELECT *
+        FROM users
+        WHERE nome = "${search}"
+      `)
+      const [ findAllPosts, rowsPost ]  = await mysql.query(`
+        SELECT *
+        FROM posts
+        WHERE nome = "${search}"
+      `)
+      res.render("search_user", {
+        buttons: `
+          <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+        `,
+        type: "usuario",
+        users: findAllUsers,
+        posts: findAllPosts
+      })
+      console.log("Pesquisa de usuário com o nome", search)
+    }else if(type === "conteudo"){
+      const [ findAllPosts, rowsPost ]  = await mysql.query(`
+        SELECT *
+        FROM posts
+        WHERE titulo = "${search}"
+      `)
+      res.render("search_content", {
+        buttons: `
+          <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+        `,
+        type: "conteudo",
+        posts: findAllPosts
+      })
+      console.log("Pesquisa de conteúdo com o termo", search)
+    }else if(type === "comentario"){
+      const [ findAllComments, rowsComment ]  = await mysql.query(`
+        SELECT *
+        FROM comments
+        WHERE comentario = "${search}"
+      `)
+      res.render("search_comment", {
+        buttons: `
+          <button type="button" class="btn btn-sm btn-dark" onclick="location.href='/@${user['nome']}'"><strong>@${user["nome"]}</strong></button>
+        `,
+        type: "comentario",
+        comments: findAllComments
+      })
+      console.log("Pesquisa de comentário com o termo", search)
+
+    }
   }
 })
 app.get("/publicar", async(req, res)=>{
