@@ -1,0 +1,50 @@
+<div class="container">
+  <div class="row">
+    <div class="col-md-6">
+      <h2 class="text-center">
+        Usuários encontrados
+      </h2>
+      {{#each users}}
+        <div class="card text-bg-light p-3 mb-3">
+          <div>
+            <strong><a href="/@{{nome}}" class="text-dark text-decoration-none">{{nome}}</a></strong>
+            <span class="text-muted">
+              {{data}}
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="card text-bg-white mb-3 p-4">
+              {{{biografia}}}
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-outline-dark" onclick="location.href='/@{{nome}}'">Ver perfil</button>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+    <div class="col-md-6">
+      <h2 class="text-center">
+        Publicações relacionadas
+      </h2>
+      {{#each posts}}
+        <div class="card text-bg-light p-3 mb-3">
+          <div>
+            <strong><a href="/@{{nome}}" class="text-dark text-decoration-none">{{nome}}</a></strong>
+            <span class="text-muted">
+              {{data}}
+            </span>
+          </div>
+          <div class="card-body">
+            <div class="mb-3">
+              <a href="/@{{nome}}/{{id}}/{{titulo}}" class="text-dark">{{titulo}}</a>
+            </div>
+            <div class="text-center">
+              <button type="button" class="btn btn-outline-dark" onclick="location.href='/@{{nome}}/{{id}}/{{titulo}}'">Ver mais</button>
+            </div>
+          </div>
+        </div>
+      {{/each}}
+    </div>
+  </div>
+</div>
