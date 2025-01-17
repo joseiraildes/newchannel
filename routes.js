@@ -325,7 +325,7 @@ app.get("/@:nome/:id/:titulo", async(req, res)=>{
     `
     res.render("post", {
       buttons,
-      posts,
+      post,
       comments
     })
   }else{
