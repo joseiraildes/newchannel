@@ -305,7 +305,7 @@ app.get("/@:nome/:id/:titulo", async(req, res)=>{
   const { nome, id, titulo } = req.params
   const user = await User.findOne({
     where: {
-      nome
+      ip: ip.ip
     }
   })
   const [ comments, rowsComment ] = await mysql.query(`
